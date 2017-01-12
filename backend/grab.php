@@ -13,7 +13,7 @@ function loadBL() {
     foreach($bl_products as $element) {
       $product_name = $element->children(0)->children(0)->getAttribute("data-name");
       $isInstallment = $element->find('div[class=product-price]',0)->getAttribute('installment');
-      if ($isInstallment == true) {
+      if ($isInstallment === true) {
           $product_harga = $element->find('span[class=product-price__installment]',0)->find('span[class=amount]',0)->innertext;
       } else {
         if ($element->find('span[product-price__reduced]',0) != null) {
@@ -38,7 +38,8 @@ function loadBL() {
       $datasource2[$j][1] = "Rp " . $product_harga;
       $datasource2[$j][2] = $product_gambar;
       $datasource2[$j][3] = $product_rating;
-      $datasource2[$j][4] = $product_ulasan;
+      preg_match_all('!\d+!', $product_ulasan, $matches);
+      $datasource2[$j][4] = $matches[0][0];
       $datasource2[$j][5] = "http://www.klikforedi.com/wp-content/uploads/2016/08/logobukalapak-01.png";
       $datasource2[$j][6] = "https://bukalapak.com" . $product_url;
 
@@ -77,8 +78,10 @@ function loadElevenia() {
         $datasource2[$j][0] = $product_name;
         $datasource2[$j][1] = $product_harga;
         $datasource2[$j][2] = $product_gambar;
-        $datasource2[$j][3] = $product_rating;
-        $datasource2[$j][4] = $product_ulasan;
+        preg_match_all('!\d+!', $product_rating, $matches1);
+        $datasource2[$j][3] = $matches1[0][0] . ".0";
+        preg_match_all('!\d+!', $product_ulasan, $matches);
+        $datasource2[$j][4] = $matches[0][0];
         $datasource2[$j][5] = "http://www.elevenia.co.id/img_11ia/h1_logo_ver2.png";
         $datasource2[$j][6] = $product_url;
 
