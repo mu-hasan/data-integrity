@@ -74,13 +74,8 @@
                                 <h4><?php echo $datasource[$i][1]; ?></h4>
                               </div>
                               <div class="ratings">
-                                <p>
-                                  <span class="glyphicon glyphicon-star-empty"></span>
-                                  <span class="glyphicon glyphicon-star-empty"></span>
-                                  <span class="glyphicon glyphicon-star-empty"></span>
-                                  <span class="glyphicon glyphicon-star-empty"></span>
-                                  <span class="glyphicon glyphicon-star-empty"></span>
-                                </p>(<?php echo $datasource[$i][4]; ?>)
+                                <?php echo $datasource[$i][3]; ?> / 5.0
+                                (<?php echo $datasource[$i][4]; ?>)
                               </div>
                             </div>
                           </div>
