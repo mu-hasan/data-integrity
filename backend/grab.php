@@ -35,7 +35,7 @@ function loadBL() {
       }
 
       $datasource2[$j][0] = $product_name;
-      $datasource2[$j][1] = $product_harga;
+      $datasource2[$j][1] = "Rp " . $product_harga;
       $datasource2[$j][2] = $product_gambar;
       $datasource2[$j][3] = $product_rating;
       $datasource2[$j][4] = $product_ulasan;
@@ -50,52 +50,40 @@ function loadBL() {
 }
 
 function loadElevenia() {
-  $datasource = array();
   $datasource2 = array(array());
 
   $j = 0;
   for ($i=1; $i < 2; $i++) {
     $elevenia = file_get_html("http://www.elevenia.co.id/ctg-laptop-notebook-1?pageNum=" . $i);
 
-    $lz_div = $lazada->find('div[id=product_listing]',0);
-    $lz_ul = $lz_div->find('ul[class=albumList]');
-    foreach($lz_ul as $element1) {
-      $lz_products = $element1->find('li',0);
-      $product = $lz_products->children(3)->innertext;
-      $product_name = $lz_products->children(3)->innertext;
-//      array_push($datasource, $product);
-      $datasource2[$j][0] = $product;
-      $datasource2[$j][1] = "test";
-      // echo $lz_products[0]->children(3)->innertext . "<br>";
-      // foreach($lz_products as $element) {
-      //   // $product = $element->children(3)->innertext;
-      //   // array_push($datasource, $product);
-      //   // $txt = $product . "\n";
-      //   // fwrite($myfile, $txt);
-      // }
-      $j++;
-    }
-
     $lz_div = $elevenia->find('div[id=product_listing]',0);
-    $lz_ul = $lz_div->find('div[class=product-card]');
-    foreach($lz_ul as $element1) {
-      $product_name = $element1->find('div[class=product-card__name-wrap]',0)->children(0)->innertext;
+    $lz_ul = $lz_div->find('ul[class=albumList]');
+    foreach($lz_ul as $element) {
+      $lz_products1 = $element->find('li[class=itemList]');
+      foreach($lz_products1 as $lz_products) {
+        $product_name = $lz_products->children(3)->innertext;
+        $product_harga = $lz_products->find('div[class=price]',0)->find('strong')->innertext;
+        $product_gambar = $lz_products->children(0)->children(1);
+        $product_rating = $lz_products->find('div[class=rankingArea]',0)->children(0);
+        if ($product_rating == null) {
+          $product_ulasan = "0";
+          $product_rating = "0";
+        } else {
+          $product_ulasan = $product_rating->children(0)->children(0)->innertext;
+          $product_rating = $product_rating->getAttribute("class");
+        }
+        $product_url = $lz_products->children(3)->getAttribute("href");
 
-      $datasource2[$j][0] = "<a target='_blank' href='https://bukalapak.com'>" . $product_name . "</a>";
-      $datasource2[$j][1] = "";
-      $datasource2[$j][2] = "";
-      $datasource2[$j][3] = 1; //stock
-      $datasource2[$j][4] = "";
-      $datasource2[$j][5] = "";
-      $datasource2[$j][6] = "http://www.elevenia.co.id/img_11ia/h1_logo_ver2.png";
-      // echo $lz_products[0]->children(3)->innertext . "<br>";
-      // foreach($lz_products as $element) {
-      //   // $product = $element->children(3)->innertext;
-      //   // array_push($datasource, $product);
-      //   // $txt = $product . "\n";
-      //   // fwrite($myfile, $txt);
-      // }
-      $j++;
+        $datasource2[$j][0] = $product_name;
+        $datasource2[$j][1] = $product_harga;
+        $datasource2[$j][2] = $product_gambar;
+        $datasource2[$j][3] = $product_rating;
+        $datasource2[$j][4] = $product_ulasan;
+        $datasource2[$j][5] = "http://www.elevenia.co.id/img_11ia/h1_logo_ver2.png";
+        $datasource2[$j][6] = $product_url;
+
+        $j++;
+      }
     }
   }
 
@@ -103,10 +91,11 @@ function loadElevenia() {
 }
 
 function loadData() {
-//  $dataElevenia = loadElevenia();
-//  return $dataElevenia;
+  $dataElevenia = loadElevenia();
+  // return $dataElevenia;
+
   $dataBL = loadBL();
-  return $dataBL;
+  // return $dataBL;
 
   $datasource = array_merge($dataBL, $dataElevenia);
 
