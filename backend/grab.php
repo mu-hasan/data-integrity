@@ -22,7 +22,7 @@ function loadBL() {
           $product_harga = $element->find('div[class=product-price]',0)->find('span[class=amount]',0)->innertext;
         }
       }
-      $product_gambar = $element->children(0)->children(0)->children(0)->children(0)->innertext;
+      $product_gambar = $element->children(0)->children(0)->children(0)->children(0)->find('img', 0)->getAttribute("src");
       $product_url = $element->children(0)->children(0)->children(0)->children(0)->getAttribute("href");
       $product_rating = $element->find('div[class=product__rating]',0)->children(0);
       $product_ulasan = $element->find('div[class=product__rating]',0);
@@ -42,6 +42,7 @@ function loadBL() {
       $datasource2[$j][4] = $matches[0][0];
       $datasource2[$j][5] = "http://www.klikforedi.com/wp-content/uploads/2016/08/logobukalapak-01.png";
       $datasource2[$j][6] = "https://bukalapak.com" . $product_url;
+      $datasource2[$j][7] = "bukalapak";
 
       $j++;
     }
@@ -63,8 +64,8 @@ function loadElevenia() {
       $lz_products1 = $element->find('li[class=itemList]');
       foreach($lz_products1 as $lz_products) {
         $product_name = $lz_products->children(3)->innertext;
-        $product_harga = $lz_products->find('div[class=price]',0)->find('strong')->innertext;
-        $product_gambar = $lz_products->children(0)->children(1);
+        $product_harga = $lz_products->find('div[class=price]',0)->find('strong',0)->innertext;
+        $product_gambar = $lz_products->children(0)->children(1)->getAttribute("src");
         $product_rating = $lz_products->find('div[class=rankingArea]',0)->children(0);
         if ($product_rating == null) {
           $product_ulasan = "0";
@@ -84,6 +85,7 @@ function loadElevenia() {
         $datasource2[$j][4] = $matches[0][0];
         $datasource2[$j][5] = "http://www.elevenia.co.id/img_11ia/h1_logo_ver2.png";
         $datasource2[$j][6] = $product_url;
+        $datasource2[$j][7] = "elevenia";
 
         $j++;
       }
