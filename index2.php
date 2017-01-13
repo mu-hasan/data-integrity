@@ -26,7 +26,7 @@
 						<img src="<?php echo $row["Sumber_logo"];?>" class="img-responsive" alt="">
 						<img src="<?php echo $row["Barang_gambar"];?>" class="img-responsive" >
 						<div class="caption">
-							<h4><a href="<?php echo $row["Url"];?>"><?php echo $row["Barang_nama"];?></a></h4>
+							<h4><a target="_blank" href="<?php echo $row["Url"];?>"><?php echo $row["Barang_nama"];?></a></h4>
 							<h4><?php echo "Rp " . number_format($row["Barang_harga"], 0, ",",".");?></h4>
 
 						</div>
