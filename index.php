@@ -88,40 +88,41 @@
 								</div>
 							</form>
 						</div><!-- /.col-lg-6 -->
-						
+
 					<br/><br/><br/>
 					</div>
-					
+
 					<br/><br/>
 				</div>
 
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="row">
-						
+
 						<?php
 							if(isset($_GET["kata"])){include 'index2.php';};
-							
+
 						?>
-						
-				<!-- isi data awal -->		
+
+				<!-- isi data awal -->
 <?php
-include 'homepage.php';		
+include 'homepage.php';
   while($row = mysqli_fetch_array($rs)){
-  
-?> 
+
+?>
 							<div class="col-sm-4 col-lg-3 col-md-3">
 					<div class="thumbnail">
-						<img src="<?php echo $row["Barang_gambar"];?>" style="weight:320px; height:150px" class="img-responsive" alt="">
+						<img src="<?php echo $row["Sumber_logo"];?>" class="img-responsive" alt="">
+						<img src="<?php echo $row["Barang_gambar"];?>" class="img-responsive" alt="">
 						<div class="caption">
 							<h4><a href="<?php echo $row["Url"];?>"><?php echo $row["Barang_nama"];?></a></h4>
-							<h4><?php echo $row["Barang_harga"];?></h4>								
+							<h4><?php echo "Rp " . number_format($row["Barang_harga"], 0, ",",".");?></h4>
 							<p><?php echo $row["Barang_stok"];?></p>
-						
+
 						</div>
-						<div class="ratings">                                
+						<div class="ratings">
 							<p>
-								<?php 
+								<?php
 									$x=$row["Barang_rating"];
 									while($x>0){
 										echo '<span class="glyphicon glyphicon-star"></span>';
@@ -168,10 +169,10 @@ include 'homepage.php';
    $paging .= '<ul>';
   }
   echo $paging;
- ?>			
+ ?>
     </div>
     <!-- /.container -->
-	
+
     <div class="container">
 
         <hr>
@@ -193,7 +194,7 @@ include 'homepage.php';
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
-	
+
 	<script>
 		$('#myTabs a').click(function (e) {
 			e.preventDefault()
