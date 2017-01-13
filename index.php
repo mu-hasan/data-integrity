@@ -75,7 +75,7 @@
 					<div class="container">
 						<div class="col-lg-3"></div>
 						<div class="col-lg-6">
-							<form action="index.php" method="get">
+							<form method="get">
 								<div class="form-group">
 									<input type="text" name="kata" class="form-control" placeholder="Search" required>
 									<select name="urutan" class="form-control">
