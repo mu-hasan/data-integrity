@@ -47,10 +47,90 @@
     </nav>
 
     <?php
-    //include 'homepage.php';
-    //  while($row = mysqli_fetch_array($rs)){
-      require_once('grab.php');
-      $datasource = loadData();
+      if (isset($_POST['nama'])) {
+        require_once('../connection.php');
+
+        $nama = $_POST['nama'];
+        $harga = $_POST['harga'];
+        $gambar = $_POST['gambar'];
+        $rating = $_POST['rating'];
+        $ulasan = $_POST['ulasan'];
+        $url = $_POST['url'];
+        $sumber = $_POST['sumber'];
+        $logo = $_POST['logo'];
+
+        foreach( $nama as $key => $n ) {
+          // check sumber
+          $sCountSumber = "SELECT Sumber_ID
+              FROM sumber
+              where Sumber_nama = '" . $sumber[$key] . "'";
+
+        	$result = mysqli_query($conn, $sCountSumber);
+          if (mysqli_num_rows($result) == 0){
+            $sCreateSumber = "INSERT INTO sumber (Sumber_nama, Sumber_logo, Last_update) VALUES (" .
+            "'" . $sumber[$key] . "'," .
+            "'" . $logo[$key] . "'," .
+            "now()" .
+            ")";
+
+            if (mysqli_query($conn, $sCreateSumber)) {
+              $sumber_id = mysqli_insert_id($conn);
+            }
+          } else {
+            $sumber_id = mysqli_fetch_array($result)[0];
+          }
+          // selesai check sumber
+
+          // insert barang
+          $sCountBarang = "SELECT Barang_ID
+              FROM barang
+              where Barang_gambar = '" . $gambar[$key] . "'";
+
+        	$result = mysqli_query($conn, $sCountBarang);
+          $final_harga = str_replace("Rp ","",$harga[$key]);
+          $final_harga = str_replace(".","",$final_harga);
+          echo $harga[$key] . "\n";
+          if (mysqli_num_rows($result) == 0){
+            $sCreateBarang = "INSERT INTO barang (Barang_nama, Barang_harga, Barang_gambar, Barang_rating, Barang_ulasan) VALUES (" .
+            "'" . $nama[$key] . "'," .
+            "'" . $final_harga . "'," .
+            "'" . $gambar[$key] . "'," .
+            "'" . $rating[$key] . "'," .
+            "'" . $ulasan[$key] . "'" .
+            ")";
+            if (mysqli_query($conn, $sCreateBarang)) {
+              $barang_id = mysqli_insert_id($conn);
+            }
+          } else {
+            $barang_id = mysqli_fetch_array($result)[0];
+
+            $sUpdateBarang = "UPDATE barang SET Barang_harga = " . $final_harga . ", Barang_rating = " . $rating[$key] . ", Barang_ulasan = " . $ulasan[$key] .
+            " WHERE Barang_ID = " . $barang_id;
+
+            mysqli_query($conn, $sUpdateBarang);
+          }
+          // selesai insert barang
+
+          // link barang dengan sumber
+          $sCountLink = "SELECT Barang_ID
+              FROM sumber_barang
+              where Barang_ID = '" . $barang_id . "' AND " .
+              "Sumber_ID = '" . $sumber_id . "'";
+
+        	$result = mysqli_query($conn, $sCountLink);
+          if (mysqli_num_rows($result) == 0){
+            $sCreateLink = "INSERT INTO sumber_barang (Sumber_ID, Barang_ID, Url) VALUES (" .
+            "'" . $sumber_id . "'," .
+            "'" . $barang_id . "'," .
+            "'" . $url[$key] . "'" .
+            ")";
+            mysqli_query($conn, $sCreateLink);
+          }
+        }
+      } else {
+        require_once('grab.php');
+        $datasource = loadData();
+      }
     ?>
 
     <!-- Page Content -->
@@ -68,7 +148,7 @@
                           <div class="col-sm-4 col-lg-3 col-md-3">
                             <div class="thumbnail">
                               <img src="<?php echo $datasource[$i][5]; ?>">
-                              <?php echo $datasource[$i][2]; ?>
+                              <img src="<?php echo $datasource[$i][2]; ?>">
                               <div class="caption">
                                 <h4><a target="_blank" href="<?php echo $datasource[$i][6]; ?>"><?php echo $datasource[$i][0]; ?></a></h4>
                                 <h4><?php echo $datasource[$i][1]; ?></h4>
@@ -82,8 +162,26 @@
                     <?php
                           $i++;
                         }
-                     ?>
-                    <center><button class="btn btn-primary">Masukkan ke Database</buton></center>
+                    ?>
+                    <form method="post">
+                      <?php
+                          $i = 0;
+                          foreach($datasource as $product) {
+                      ?>
+                      <input type="hidden" name="nama[]" value="<?php echo $datasource[$i][0]; ?>" />
+                      <input type="hidden" name="harga[]" value="<?php echo $datasource[$i][1]; ?>" />
+                      <input type="hidden" name="gambar[]" value="<?php echo $datasource[$i][2]; ?>" />
+                      <input type="hidden" name="rating[]" value="<?php echo $datasource[$i][3]; ?>" />
+                      <input type="hidden" name="ulasan[]" value="<?php echo $datasource[$i][4]; ?>" />
+                      <input type="hidden" name="url[]" value="<?php echo $datasource[$i][6]; ?>" />
+                      <input type="hidden" name="sumber[]" value="<?php echo $datasource[$i][7]; ?>" />
+                      <input type="hidden" name="logo[]" value="<?php echo $datasource[$i][5]; ?>" />
+                      <?php
+                            $i++;
+                          }
+                      ?>
+                      <center><input type="submit" class="btn btn-primary" value="Masukkan ke Database"></center>
+                    </form>
                     <!-- batas -->
                   </div>
                 </div>
