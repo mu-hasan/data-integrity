@@ -89,7 +89,7 @@
         	$result = mysqli_query($conn, $sCountBarang);
           $final_harga = str_replace("Rp ","",$harga[$key]);
           $final_harga = str_replace(".","",$final_harga);
-          echo $harga[$key] . "\n";
+
           if (mysqli_num_rows($result) == 0){
             $sCreateBarang = "INSERT INTO barang (Barang_nama, Barang_harga, Barang_gambar, Barang_rating, Barang_ulasan) VALUES (" .
             "'" . $nama[$key] . "'," .
@@ -179,8 +179,13 @@
                       <?php
                             $i++;
                           }
+
+                          if ($datasource != null) {
                       ?>
                       <center><input type="submit" class="btn btn-primary" value="Masukkan ke Database"></center>
+                      <?php } else {
+                        echo "<center>Data Saved!</center>";
+                      } ?>
                     </form>
                     <!-- batas -->
                   </div>
@@ -189,34 +194,6 @@
             </div>
         </div>
 			<!-- testing -->
-<?php
-//include 'homepage.php';
-//  $paging = null;
-//  if($total_page > 1){
-//   $paging .= '<ul class="pagination">';
-
-//   if($page > ($prev + 1)){
-//    $paging .= '<li><a href="index.php?page=1">First</a></li>';
-//    $paging .= '<li><a href="index.php?page='.($page - 1).'">Last</a></li>';
-//   }
-
-//   for($i=$start_page; $i<=$display_page; $i++){
-//    if($i == $page){
-//     $paging .= '<li class="active"><a href="#'.$i.'">'.$i.'<span class="sr-only">(current)</span></a></li>';
-//    }else{
-//     $paging .= '<li><a href="index.php?page='.$i.'">'.$i.'</a></li>';
-//    }
-//   }
-
-//   if($total_page > $display_page){
-//    $paging .= '<li><a href="index.php?page='.($page + 1).'">Next</a></li>';
-//    $paging .= '<li><a href="index.php?page='.$total_page.'">Prev</a></li>';
-//   }
-
-//   $paging .= '<ul>';
-//  }
-//  echo $paging;
- ?>
     </div>
     <!-- /.container -->
 
